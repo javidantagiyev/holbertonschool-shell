@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-# This script loops from 1 to 10
-# Displays "bad luck" on the 4th iteration
-# Displays "good luck" on the 8th iteration
-# Displays "Best School" for all other iterations
+# This script displays special messages on the 4th and 8th iteration using a while loop
 
 count=1
-while [ $count -le 10 ]
-do
+while [ $count -le 10 ]; do
     if [ $count -eq 4 ]; then
         echo "bad luck"
     elif [ $count -eq 8 ]; then
@@ -14,5 +10,6 @@ do
     else
         echo "Best School"
     fi
-    ((count++))
+    count=$((count + 1))
 done
+
