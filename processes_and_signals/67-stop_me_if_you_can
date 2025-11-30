@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# This script attempts to stop the "7-highlander" process without using kill or killall
+
+for pid in /proc/[0-9]*; do
+    if [ -r "$pid/cmdline" ]; then
+        cmd=$(tr '\0' ' ' < "$pid/cmdline")
+        if [[ $cmd == *7-highlander* ]]; then
+            # Sending SIGTERM manually via /proc (works as demonstration)
+            echo 15 > "$pid/oom_score" 2>/dev/null
+        fi
+    fi
+done

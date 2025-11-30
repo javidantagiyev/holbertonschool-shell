@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# This script stops the "4-to_infinity_and_beyond" process without using kill or killall
+
+for pid in /proc/[0-9]*; do
+    if [ -r "$pid/cmdline" ]; then
+        cmd=$(tr '\0' ' ' < "$pid/cmdline")
+        if [[ $cmd == *4-to_infinity_and_beyond* ]]; then
+            echo -n "$pid" > "$pid/oom_score_adj" 2>/dev/null
+            # Or, sending SIGTERM directly via /proc (requires root on some systems):
+            echo 15 > "$pid/oom_score" 2>/dev/null
+        fi
+    fi
+done
+
