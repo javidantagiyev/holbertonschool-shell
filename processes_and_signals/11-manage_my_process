@@ -12,14 +12,20 @@ case "$1" in
         ;;
     stop)
         if [ -f "$PID_FILE" ]; then
-            kill "$(cat "$PID_FILE")" 2>/dev/null
+            PID=$(cat "$PID_FILE")
+            if kill -0 "$PID" 2>/dev/null; then
+                kill "$PID"
+            fi
             rm -f "$PID_FILE"
         fi
         echo "manage_my_process stopped"
         ;;
     restart)
         if [ -f "$PID_FILE" ]; then
-            kill "$(cat "$PID_FILE")" 2>/dev/null
+            PID=$(cat "$PID_FILE")
+            if kill -0 "$PID" 2>/dev/null; then
+                kill "$PID"
+            fi
             rm -f "$PID_FILE"
         fi
         "$DAEMON" &
