@@ -1,39 +1,30 @@
 #!/usr/bin/env bash
+# This script manages the manage_my_process process (start, stop, restart)
 
 PID_FILE="/var/run/my_process.pid"
-SCRIPT_PATH="$(pwd)/manage_my_process"
-
-start() {
-    "$SCRIPT_PATH" &
-    echo $! > "$PID_FILE"
-    echo "manage_my_process started"
-}
-
-stop() {
-    if [ -f "$PID_FILE" ]; then
-        kill "$(cat "$PID_FILE")" 2>/dev/null
-        rm -f "$PID_FILE"
-        echo "manage_my_process stopped"
-    else
-        echo "manage_my_process not running"
-    fi
-}
-
-restart() {
-    stop
-    start
-    echo "manage_my_process restarted"
-}
+DAEMON="./manage_my_process"
 
 case "$1" in
     start)
-        start
+        "$DAEMON" &
+        echo $! > "$PID_FILE"
+        echo "manage_my_process started"
         ;;
     stop)
-        stop
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")" 2>/dev/null
+            rm -f "$PID_FILE"
+        fi
+        echo "manage_my_process stopped"
         ;;
     restart)
-        restart
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")" 2>/dev/null
+            rm -f "$PID_FILE"
+        fi
+        "$DAEMON" &
+        echo $! > "$PID_FILE"
+        echo "manage_my_process restarted"
         ;;
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
