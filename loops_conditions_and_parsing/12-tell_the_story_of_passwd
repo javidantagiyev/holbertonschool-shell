@@ -1,6 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Display a story about each user from /etc/passwd
 
-while IFS=":" read -r user pass uid gid info home shell
-do
-    echo "The user $user is part of the $gid gang, lives in $home and rides $shell. $uid's place is protected by the passcode $pass, more info about the user here: $info"
+while IFS=: read -r username _ userid groupid comment home shell; do
+    # If password field is empty, assume "x"
+    password="x"
+    # If comment field is empty, replace with empty string
+    if [ -z "$comment" ]; then
+        comment=""
+    fi
+    echo "The user $username is part of the $groupid gang, lives in $home and rides $shell. $userid's place is protected by the passcode $password, more info about the user here: $comment"
 done < /etc/passwd
+
