@@ -1,2 +1,12 @@
 #!/bin/bash
-echo $PATH | tr ':' '\n' | wc -l
+OLDIFS="$IFS"
+IFS=":"
+count=0
+for dir in $PATH
+do
+    if [ -d "$dir" ]; then
+        count=$((count+1))
+    fi
+done
+IFS="$OLDIFS"
+echo "$count"
